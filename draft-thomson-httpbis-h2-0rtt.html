@@ -10,7 +10,8 @@
        This proposes an extension to HTTP/2 that enables the use of server settings by
 clients that send requests in TLS early data.  In particular, this allows
 extensions to the protocol to be used. 
-       This amends the definition of settings defined in RFC 7540 and RFC 8441. 
+       This amends the definition of settings defined in RFC 7540 and RFC 8441 and
+introduces new registration requirements for HTTP/2 settings. 
     " name="description">
 <meta content="xml2rfc 3.5.0" name="generator">
 <meta content="draft-thomson-httpbis-h2-0rtt-latest" name="ietf.draft">
@@ -861,7 +862,8 @@ address div.right {
 <p id="section-abstract-1">This proposes an extension to HTTP/2 that enables the use of server settings by
 clients that send requests in TLS early data.  In particular, this allows
 extensions to the protocol to be used.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This amends the definition of settings defined in RFC 7540 and RFC 8441.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This amends the definition of settings defined in RFC 7540 and RFC 8441 and
+introduces new registration requirements for HTTP/2 settings.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-discussion-venues">
@@ -921,62 +923,62 @@ extensions to the protocol to be used.<a href="#section-abstract-1" class="pilcr
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty toc compact">
-<li class="ulEmpty toc compact" id="section-toc.1-1.1">
+<nav class="toc"><ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.2">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-conventions-and-definitions" class="xref">Conventions and Definitions</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.3">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-early_data_settings-setting" class="xref">EARLY_DATA_SETTINGS Setting</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
-<ul class="ulEmpty toc compact">
-<li class="ulEmpty toc compact" id="section-toc.1-1.3.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-server-handling" class="xref">Server Handling</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.3.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-client-handling" class="xref">Client Handling</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.3.2.3">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-use-for-resumption" class="xref">Use for Resumption</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.4">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-settings-in-early-data" class="xref">Settings in Early Data</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
-<ul class="ulEmpty toc compact">
-<li class="ulEmpty toc compact" id="section-toc.1-1.4.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-existing-http-2-settings" class="xref">Existing HTTP/2 Settings</a><a href="#section-toc.1-1.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.4.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.4.2.2">
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-connect-protocol" class="xref">CONNECT Protocol</a><a href="#section-toc.1-1.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.4.2.3">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.4.2.3">
                 <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-replay-attack-risk" class="xref">Replay Attack Risk</a><a href="#section-toc.1-1.4.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.4.2.4">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.4.2.4">
                 <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-advertising-less-permissive" class="xref">Advertising Less-Permissive Values</a><a href="#section-toc.1-1.4.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.5">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.6">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.7">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
-<ul class="ulEmpty toc compact">
-<li class="ulEmpty toc compact" id="section-toc.1-1.7.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.7.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="ulEmpty toc compact" id="section-toc.1-1.7.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.7.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty toc compact" id="section-toc.1-1.8">
+          <li class="compact ulEmpty toc" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-address" class="xref">Author's Address</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -988,23 +990,25 @@ extensions to the protocol to be used.<a href="#section-abstract-1" class="pilcr
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">HTTP/2 <span>[<a href="#HTTP2" class="xref">HTTP2</a>]</span> was defined prior to the introduction of TLS early
-data <span>[<a href="#TLS" class="xref">TLS</a>]</span>, so it does not include any special provisions for its
-use.  As a result, when using HTTP/2 with TLS early data, clients are forced to
-assume defaults for the server configuration.  This limits performance as it can
+<p id="section-1-1">HTTP/2 <span>[<a href="#HTTP2" class="xref">HTTP2</a>]</span> does not include any special provisions for the use of
+TLS early data as it was published prior to the introduction the feature in TLS
+1.3 <span>[<a href="#TLS" class="xref">TLS</a>]</span>.  As a result, when using HTTP/2 with TLS early data,
+clients are forced to assume defaults for the server configuration.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Using the initial value of settings can adversely affect performance as it can
 take an additional round trip or two to receive the connection preface from the
-server.  Clients that wish to use extensions therefore have to deal with
-extended delays before they can confirm server support for the extension.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">In contrast, HTTP/3 <span>[<a href="#HTTP3" class="xref">HTTP3</a>]</span> was defined for use with QUIC
+server.  This is especially noticeable for new features that are added using
+extensions.  Clients that wish to use extensions therefore have to deal with
+extended delays before they can confirm server support for the extension.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">In contrast, HTTP/3 <span>[<a href="#HTTP3" class="xref">HTTP3</a>]</span> was defined for use with QUIC
 <span>[<a href="#QUIC" class="xref">QUIC</a>]</span>, which includes early data (or 0-RTT) as a
 core features.  The use in HTTP/3 demonstrates the value of access to
-non-default values of server configuration, especially for performance.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This document defines a new setting for servers and clients to indicate a
+non-default values of server configuration, especially for performance.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This document defines a new setting for servers and clients to indicate a
 willingness to remember settings from a previous connection when attempting TLS
 early data.  This allows clients to rely on capabilities established in a
 previous connection.  This also offers servers the ability to place tighter
 restrictions on use of early data than the initial values of settings otherwise
-allows.<a href="#section-1-3" class="pilcrow">¶</a></p>
+allows.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1020,47 +1024,54 @@ allows.<a href="#section-1-3" class="pilcrow">¶</a></p>
       <h2 id="name-early_data_settings-setting">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-early_data_settings-setting" class="section-name selfRef">EARLY_DATA_SETTINGS Setting</a>
       </h2>
-<p id="section-3-1">The EARLY_DATA_SETTINGS setting (0xTBD) is sent by a server to indicate that it
-will remember the value of settings it advertises if it accepts TLS early data
-in a subsequent connection.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">The EARLY_DATA_SETTINGS setting (0xTBD) is sent to indicate support for
+remembering the value of settings in TLS early data.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">A server that advertises a value for EARLY_DATA_SETTINGS of 1 MUST remember all
+settings defined as being applicable to early data; see <a href="#applicable-settings" class="xref">Section 4</a>.
+A client that advertises a value for EARLY_DATA_SETTINGS of 1 and has received a
+value of 1 from a server MUST respect these settings when attempting early data.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="server-handling">
 <section id="section-3.1">
         <h3 id="name-server-handling">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-server-handling" class="section-name selfRef">Server Handling</a>
         </h3>
-<p id="section-3.1-1">A value of 1 indicates that the server will respect any settings that can apply
-to early data if it accepts the early data; see <a href="#applicability" class="xref">Section 4</a>.  A value of
-0, the initial value, indicates that the client has to use initial values when
-attempting to use early data.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Any session tickets that are sent by the server subsequent to the client
-receiving an EARLY_DATA_SETTINGS set to 1 are affected by this feature.  In
-addition, setting a value of 1 in the SETTINGS frame that is part of the
+<p id="section-3.1-1">An EARLY_DATA_SETTINGS value of 1 indicates that the server will respect any
+settings that can apply to early data if it accepts the early data; see
+<a href="#applicable-settings" class="xref">Section 4</a>.  A value of 0, the initial value, indicates that
+settings assume their initial values for resumed connections (that is, the
+default behavior in HTTP/2).<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">Any session tickets that are sent by the server subsequent to a SETTINGS frame
+containing EARLY_DATA_SETTINGS set to 1 are affected by this feature.  The value
+of all applicable settings apply to each session ticket as TLS NewSessionTicket
+messages are received.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">In addition, setting a value of 1 in the SETTINGS frame that is part of the
 connection preface has the effect of applying to all session tickets sent prior
 to that point; the settings that are used for those session tickets is taken
-from the connection preface.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Servers commit to remembering initial values for settings that they do not
-include in SETTINGS frames.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">A server does not need to wait for a SETTINGS acknowledgment before it sends a
-TLS NewSessionTicket message, the value applies immediately.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-3.1-5">
-          <dt id="section-3.1-5.1">
+from the connection preface.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">Initial values for settings are used if those settings are not explicitly sent
+in a SETTINGS frame.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">A server does not need to wait for a SETTINGS acknowledgment before it sends a
+TLS NewSessionTicket message.  Values from SETTINGS frames apply immediately to
+any subsequent TLS NewSessionTicket messages.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1-6">
+          <dt id="section-3.1-6.1">
 Note:  </dt>
-          <dd style="margin-left: 1.5em" id="section-3.1-5.2">
-            <p id="section-3.1-5.2.1">As the arrival of SETTINGS frames is strictly ordered with respect to TLS
+          <dd style="margin-left: 1.5em" id="section-3.1-6.2">
+            <p id="section-3.1-6.2.1">As the arrival of SETTINGS frames is strictly ordered with respect to TLS
 NewSessionTicket messages, this ensures that the value of settings that apply
-to each session ticket is unambiguous.<a href="#section-3.1-5.2.1" class="pilcrow">¶</a></p>
+to each session ticket is unambiguous.<a href="#section-3.1-6.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-3.1-6">Once set to a value of 1, a server can set this value to 0 in subsequent
+<p id="section-3.1-7">Once set to a value of 1, a server can set this value to 0 in subsequent
 SETTINGS frames to indicate that updated settings values do not apply to early
 data.  This could be used by a server to set values that are more permissive
-than it might be willing to accept for early data.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.1-7">A server that does not remember the value of settings MUST reject early data.
-Similarly, a server that cannot respect the values that it previously set MUST
-reject early data.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.1-8">A server that advertises a value of 1 MUST remember settings even if the client
-does not indicate support for EARLY_DATA_SETTINGS.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+than it might be willing to accept for early data.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1-8">A server that might have set EARLY_DATA_SETTINGS to 1 and does not remember the
+value of settings MUST reject early data.  Similarly, a server that cannot
+respect the values that it previously set MUST reject early data.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.1-9">A server that advertises a value of 1 MUST remember settings even if the client
+does not indicate support for EARLY_DATA_SETTINGS.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="client-handling">
@@ -1071,10 +1082,15 @@ does not indicate support for EARLY_DATA_SETTINGS.<a href="#section-3.1-8" class
 <p id="section-3.2-1">A client advertises a value of 1 for EARLY_DATA_SETTINGS to indicate that it
 will respect the settings that a server sets when attempting to use early data
 if the server also advertises a value of 1; see <a href="#reducing-limits" class="xref">Section 4.4</a>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">A client MUST NOT set a value of 0 for EARLY_DATA_SETTINGS after it advertises a
+<p id="section-3.2-2">A client that advertises a value of 1 for EARLY_DATA_SETTINGS MUST remember the
+value of all applicable server settings at the time that a TLS NewSessionTicket
+was received if the server settings include a a value of 1 for
+EARLY_DATA_SETTINGS.  These settings values are then used for server settings in
+place of initial values if early data is accepted by the server.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">A client MUST NOT set a value of 0 for EARLY_DATA_SETTINGS after it advertises a
 value of 1.  A server can treat a change in the value of EARLY_DATA_SETTINGS
 from 1 to 0 as a connection error (see Section 5.4.1 of <span>[<a href="#HTTP2" class="xref">HTTP2</a>]</span>) of type
-PROTOCOL_ERROR.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+PROTOCOL_ERROR.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="resumption">
@@ -1085,10 +1101,10 @@ PROTOCOL_ERROR.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.3-1">It might have been possible to define a similar setting to indicate that a
 server would respect settings for TLS session resumption more generally.  This
 would have the benefit of providing starting values for clients that differ from
-the protocol-default initial values.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+the protocol-defined initial values.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">However, resumption does not come with a clear rejection signal in the same way
-as early data.  Servers would not have any way to indicate when previous
-settings short of rejecting resumption, which has serious performance
+as early data.  Servers would not have any way to invalidate previous settings
+short of rejecting resumption, which could have undesirable performance
 consequences.  Furthermore, a setting of that type would be difficult for
 clients to adapt to as many clients do not currently condition their behavior on
 whether the underlying TLS connection is resumed or full.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
@@ -1096,13 +1112,13 @@ whether the underlying TLS connection is resumed or full.<a href="#section-3.3-2
 way for clients to use non-initial values for settings even where 0.5-RTT data
 is not sent by the server.  Clients that want the performance gains provided by
 the EARLY_DATA_SETTINGS setting, but do not want any exposure to replay attack
-can use early data and limit their use of that to their own connection preface,
-which carries no risk from replay.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+can use early data and limit their use of that to sending the connection
+preface, which carries no risk from replay.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
-<div id="applicability">
+<div id="applicable-settings">
 <section id="section-4">
       <h2 id="name-settings-in-early-data">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-settings-in-early-data" class="section-name selfRef">Settings in Early Data</a>
@@ -1111,8 +1127,8 @@ which carries no risk from replay.<a href="#section-3.3-3" class="pilcrow">¶</a
 represent too much of a risk of replay attack.  For a setting to be usable in
 early data, a definition MUST be provided for how the value is handled.  This
 definition MUST include either an analysis showing that use of the setting in
-early data is safe, or rules for how to manages the risk of replay attack
-arising from its use; see <a href="#replay-ext" class="xref">Section 4.3</a> for details.<a href="#section-4-1" class="pilcrow">¶</a></p>
+early data is safe, or rules for managing the risk of replay attack arising from
+its use; see <a href="#replay-ext" class="xref">Section 4.3</a> for details.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">Exposure to replay attacks does not automatically disqualify settings from use
 with EARLY_DATA_SETTINGS.  As noted in <a href="#resumption" class="xref">Section 3.3</a>, there is value in being
 able to use remembered values of settings in place of initial values, even if
@@ -1220,10 +1236,10 @@ client uses the initial values for settings.<a href="#section-4.4-4" class="pilc
       </h2>
 <p id="section-5-1">The potential for replay attacks on early data is significant and needs
 consideration; see <a href="#replay-ext" class="xref">Section 4.3</a> for details.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">A server that offers this setting requires a larger amount of state associated
-with sessions that might be resumed with early data.  This state is bounded in
-size and can be offloaded using session tickets, so this is expected to be
-manageable.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-2">An endpoint that offers this setting requires a larger amount of state
+associated with sessions that might be resumed with early data.  This state is
+bounded in size and can be offloaded using session tickets, so this is expected
+to be manageable.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana">
@@ -1237,15 +1253,14 @@ two values:<a href="#section-6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6-2.1">A value of "Y" indicates that the value of this setting advertised by a server
 is remembered by that if it advertises the EARLY_DATA_SETTINGS setting.  In so
-doing, clients can rely on the capability indicated by the setting, or the
-limits advertised, being available when they use TLS early data.  Clients MUST
-respect any value chosen.  If the server accepts early data, the server
-guarantees that any value it chooses will be compatible with the value it
-previously advertised.<a href="#section-6-2.1" class="pilcrow">¶</a>
+doing, clients can rely on the value of the setting when attempting to use TLS
+early data.  Clients MUST remember settings values and respect any values it
+has remembered when attempting to use early data.<a href="#section-6-2.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-6-2.2">A value of "N" indicates that the setting does not need to be remembered by a
 server or respected by a client when accepting or attempting early data.  The
-value is set to its default until the server sends its first SETTINGS frame.<a href="#section-6-2.2" class="pilcrow">¶</a>
+client needs to observe initial values for settings until the server sends its
+first SETTINGS frame.<a href="#section-6-2.2" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-6-3">New registrations to this registry MUST specify a value for this field.<a href="#section-6-3" class="pilcrow">¶</a></p>
@@ -1260,49 +1275,49 @@ value is set to its default until the server sends its first SETTINGS frame.<a h
           <tr>
             <th class="text-right" rowspan="1" colspan="1">Code</th>
             <th class="text-left" rowspan="1" colspan="1">Name</th>
-            <th class="text-right" rowspan="1" colspan="1">Early Data</th>
+            <th class="text-center" rowspan="1" colspan="1">Early Data</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x1</td>
             <td class="text-left" rowspan="1" colspan="1">HEADER_TABLE_SIZE</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x2</td>
             <td class="text-left" rowspan="1" colspan="1">ENABLE_PUSH</td>
-            <td class="text-right" rowspan="1" colspan="1">N</td>
+            <td class="text-center" rowspan="1" colspan="1">N</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x3</td>
             <td class="text-left" rowspan="1" colspan="1">MAX_CONCURRENT_STREAMS</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x4</td>
             <td class="text-left" rowspan="1" colspan="1">INITIAL_WINDOW_SIZE</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x5</td>
             <td class="text-left" rowspan="1" colspan="1">MAX_FRAME_SIZE</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x6</td>
             <td class="text-left" rowspan="1" colspan="1">MAX_HEADER_LIST_SIZE</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x8</td>
             <td class="text-left" rowspan="1" colspan="1">SETTINGS_ENABLE_CONNECT_PROTOCOL</td>
-            <td class="text-right" rowspan="1" colspan="1">Y</td>
+            <td class="text-center" rowspan="1" colspan="1">Y</td>
           </tr>
           <tr>
             <td class="text-right" rowspan="1" colspan="1">0x10</td>
             <td class="text-left" rowspan="1" colspan="1">TLS_RENEG_PERMITTED</td>
-            <td class="text-right" rowspan="1" colspan="1">N</td>
+            <td class="text-center" rowspan="1" colspan="1">N</td>
           </tr>
         </tbody>
       </table>
