@@ -57,7 +57,7 @@ allows.
 
 # Conventions and Definitions
 
-{:boilerplate bcp14}
+{::boilerplate bcp14}
 
 This document relies on concepts from {{!HTTP2}} and {{!TLS}}.
 
