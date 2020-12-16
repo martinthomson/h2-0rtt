@@ -23,19 +23,23 @@ This proposes an extension to HTTP/2 that enables the use of server settings by
 clients that send requests in TLS early data.  In particular, this allows
 extensions to the protocol to be used.
 
-This amends the definition of settings defined in RFC 7540 and RFC 8441.
+This amends the definition of settings defined in RFC 7540 and RFC 8441 and
+introduces new registration requirements for HTTP/2 settings.
 
 
 --- middle
 
 # Introduction
 
-HTTP/2 {{!HTTP2=RFC7540}} was defined prior to the introduction of TLS early
-data {{!TLS=RFC8446}}, so it does not include any special provisions for its
-use.  As a result, when using HTTP/2 with TLS early data, clients are forced to
-assume defaults for the server configuration.  This limits performance as it can
+HTTP/2 {{!HTTP2=RFC7540}} does not include any special provisions for the use of
+TLS early data as it was published prior to the introduction the feature in TLS
+1.3 {{!TLS=RFC8446}}.  As a result, when using HTTP/2 with TLS early data,
+clients are forced to assume defaults for the server configuration.
+
+Using the initial value of settings can adversely affect performance as it can
 take an additional round trip or two to receive the connection preface from the
-server.  Clients that wish to use extensions therefore have to deal with
+server.  This is especially noticeable for new features that are added using
+extensions.  Clients that wish to use extensions therefore have to deal with
 extended delays before they can confirm server support for the extension.
 
 In contrast, HTTP/3 {{?HTTP3=I-D.ietf-quic-http}} was defined for use with QUIC
@@ -60,30 +64,39 @@ This document relies on concepts from {{!HTTP2}} and {{!TLS}}.
 
 # EARLY_DATA_SETTINGS Setting
 
-The EARLY_DATA_SETTINGS setting (0xTBD) is sent by a server to indicate that it
-will remember the value of settings it advertises if it accepts TLS early data
-in a subsequent connection.
+The EARLY_DATA_SETTINGS setting (0xTBD) is sent to indicate support for
+remembering the value of settings in TLS early data.
+
+A server that advertises a value for EARLY_DATA_SETTINGS of 1 MUST remember all
+settings defined as being applicable to early data; see {{applicable-settings}}.
+A client that advertises a value for EARLY_DATA_SETTINGS of 1 and has received a
+value of 1 from a server MUST respect these settings when attempting early data.
 
 
 ## Server Handling
 
-A value of 1 indicates that the server will respect any settings that can apply
-to early data if it accepts the early data; see {{applicability}}.  A value of
-0, the initial value, indicates that the client has to use initial values when
-attempting to use early data.
+An EARLY_DATA_SETTINGS value of 1 indicates that the server will respect any
+settings that can apply to early data if it accepts the early data; see
+{{applicable-settings}}.  A value of 0, the initial value, indicates that
+settings assume their initial values for resumed connections (that is, the
+default behavior in HTTP/2).
 
-Any session tickets that are sent by the server subsequent to the client
-receiving an EARLY_DATA_SETTINGS set to 1 are affected by this feature.  In
-addition, setting a value of 1 in the SETTINGS frame that is part of the
+Any session tickets that are sent by the server subsequent to a SETTINGS frame
+containing EARLY_DATA_SETTINGS set to 1 are affected by this feature.  The value
+of all applicable settings apply to each session ticket as TLS NewSessionTicket
+messages are received.
+
+In addition, setting a value of 1 in the SETTINGS frame that is part of the
 connection preface has the effect of applying to all session tickets sent prior
 to that point; the settings that are used for those session tickets is taken
 from the connection preface.
 
-Servers commit to remembering initial values for settings that they do not
-include in SETTINGS frames.
+Initial values for settings are used if those settings are not explicitly sent
+in a SETTINGS frame.
 
 A server does not need to wait for a SETTINGS acknowledgment before it sends a
-TLS NewSessionTicket message, the value applies immediately.
+TLS NewSessionTicket message.  Values from SETTINGS frames apply immediately to
+any subsequent TLS NewSessionTicket messages.
 
 Note:
 
@@ -96,9 +109,9 @@ SETTINGS frames to indicate that updated settings values do not apply to early
 data.  This could be used by a server to set values that are more permissive
 than it might be willing to accept for early data.
 
-A server that does not remember the value of settings MUST reject early data.
-Similarly, a server that cannot respect the values that it previously set MUST
-reject early data.
+A server that might have set EARLY_DATA_SETTINGS to 1 and does not remember the
+value of settings MUST reject early data.  Similarly, a server that cannot
+respect the values that it previously set MUST reject early data.
 
 A server that advertises a value of 1 MUST remember settings even if the client
 does not indicate support for EARLY_DATA_SETTINGS.
@@ -109,6 +122,12 @@ does not indicate support for EARLY_DATA_SETTINGS.
 A client advertises a value of 1 for EARLY_DATA_SETTINGS to indicate that it
 will respect the settings that a server sets when attempting to use early data
 if the server also advertises a value of 1; see {{reducing-limits}}.
+
+A client that advertises a value of 1 for EARLY_DATA_SETTINGS MUST remember the
+value of all applicable server settings at the time that a TLS NewSessionTicket
+was received if the server settings include a a value of 1 for
+EARLY_DATA_SETTINGS.  These settings values are then used for server settings in
+place of initial values if early data is accepted by the server.
 
 A client MUST NOT set a value of 0 for EARLY_DATA_SETTINGS after it advertises a
 value of 1.  A server can treat a change in the value of EARLY_DATA_SETTINGS
@@ -121,11 +140,11 @@ PROTOCOL_ERROR.
 It might have been possible to define a similar setting to indicate that a
 server would respect settings for TLS session resumption more generally.  This
 would have the benefit of providing starting values for clients that differ from
-the protocol-default initial values.
+the protocol-defined initial values.
 
 However, resumption does not come with a clear rejection signal in the same way
-as early data.  Servers would not have any way to indicate when previous
-settings short of rejecting resumption, which has serious performance
+as early data.  Servers would not have any way to invalidate previous settings
+short of rejecting resumption, which could have undesirable performance
 consequences.  Furthermore, a setting of that type would be difficult for
 clients to adapt to as many clients do not currently condition their behavior on
 whether the underlying TLS connection is resumed or full.
@@ -134,18 +153,18 @@ There are potential advantages from the mechanism in this draft as it provides a
 way for clients to use non-initial values for settings even where 0.5-RTT data
 is not sent by the server.  Clients that want the performance gains provided by
 the EARLY_DATA_SETTINGS setting, but do not want any exposure to replay attack
-can use early data and limit their use of that to their own connection preface,
-which carries no risk from replay.
+can use early data and limit their use of that to sending the connection
+preface, which carries no risk from replay.
 
 
-# Settings in Early Data {#applicability}
+# Settings in Early Data {#applicable-settings}
 
 Some settings cannot apply during TLS early data.  Other settings might
 represent too much of a risk of replay attack.  For a setting to be usable in
 early data, a definition MUST be provided for how the value is handled.  This
 definition MUST include either an analysis showing that use of the setting in
-early data is safe, or rules for how to manages the risk of replay attack
-arising from its use; see {{replay-ext}} for details.
+early data is safe, or rules for managing the risk of replay attack arising from
+its use; see {{replay-ext}} for details.
 
 Exposure to replay attacks does not automatically disqualify settings from use
 with EARLY_DATA_SETTINGS.  As noted in {{resumption}}, there is value in being
@@ -254,10 +273,10 @@ client uses the initial values for settings.
 The potential for replay attacks on early data is significant and needs
 consideration; see {{replay-ext}} for details.
 
-A server that offers this setting requires a larger amount of state associated
-with sessions that might be resumed with early data.  This state is bounded in
-size and can be offloaded using session tickets, so this is expected to be
-manageable.
+An endpoint that offers this setting requires a larger amount of state
+associated with sessions that might be resumed with early data.  This state is
+bounded in size and can be offloaded using session tickets, so this is expected
+to be manageable.
 
 
 # IANA Considerations {#iana}
@@ -268,22 +287,21 @@ two values:
 
 - A value of "Y" indicates that the value of this setting advertised by a server
   is remembered by that if it advertises the EARLY_DATA_SETTINGS setting.  In so
-  doing, clients can rely on the capability indicated by the setting, or the
-  limits advertised, being available when they use TLS early data.  Clients MUST
-  respect any value chosen.  If the server accepts early data, the server
-  guarantees that any value it chooses will be compatible with the value it
-  previously advertised.
+  doing, clients can rely on the value of the setting when attempting to use TLS
+  early data.  Clients MUST remember settings values and respect any values it
+  has remembered when attempting to use early data.
 
 - A value of "N" indicates that the setting does not need to be remembered by a
   server or respected by a client when accepting or attempting early data.  The
-  value is set to its default until the server sends its first SETTINGS frame.
+  client needs to observe initial values for settings until the server sends its
+  first SETTINGS frame.
 
 New registrations to this registry MUST specify a value for this field.
 
 Initial values for existing values are listed in {{iana-settings-table}}.
 
 | Code | Name | Early Data |
-| -: | :- | -:- |
+| -: | :- | :-: |
 | 0x1 | HEADER_TABLE_SIZE | Y |
 | 0x2 | ENABLE_PUSH | N |
 | 0x3 | MAX_CONCURRENT_STREAMS | Y |
