@@ -177,8 +177,8 @@ whether they are remembered when EARLY_DATA_SETTINGS is enabled.
 
 ## Existing HTTP/2 Settings
 
-This document amends the definition of extensions defined in {{!HTTP2}} to
-permit their use with early data.
+This document amends the definition of settings defined in {{!HTTP2}} to permit
+their use with early data.
 
 The ENABLE_PUSH setting only applies to clients. Though {{!HTTP2}} does not
 prohibit servers from advertising a value, there is no value in doing so.
