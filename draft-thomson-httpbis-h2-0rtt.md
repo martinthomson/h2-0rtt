@@ -109,12 +109,23 @@ SETTINGS frames to indicate that updated settings values do not apply to early
 data.  This could be used by a server to set values that are more permissive
 than it might be willing to accept for early data.
 
+However, sending session tickets that do not support early data in this way can
+create challenges for clients as they are forced to choose between newer tickets
+- which are usually more likely to be successful - and tickets that support
+early data with all settings enabled.
+
 A server that might have set EARLY_DATA_SETTINGS to 1 and does not remember the
 value of settings MUST reject early data.  Similarly, a server that cannot
 respect the values that it previously set MUST reject early data.
 
 A server that advertises a value of 1 MUST remember settings even if the client
 does not indicate support for EARLY_DATA_SETTINGS.
+
+When accepting early data, a server uses remembered values for all settings.
+When sending the connection preface, a server SHOULD update all settings that
+are not at their initial value, even if they do not change from remembered
+values.  Though a client is expected to remember all settings, renewing values
+minimizes any risk of error.
 
 
 ## Client Handling
@@ -133,6 +144,12 @@ A client MUST NOT set a value of 0 for EARLY_DATA_SETTINGS after it advertises a
 value of 1.  A server can treat a change in the value of EARLY_DATA_SETTINGS
 from 1 to 0 as a connection error (see Section 5.4.1 of {{!HTTP2}}) of type
 PROTOCOL_ERROR.
+
+Upon establishing a connection where early data is accepted by a server, a
+client uses remembered values for settings until the server connection preface,
+which updates these values.  Settings that are not updated by the server
+connection preface retain their remembered values rather than assuming initial
+values.
 
 
 ## Use for Resumption {#resumption}
