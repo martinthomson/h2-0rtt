@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2020-12-20T00:29:23.104235+00:00",
+  "timestamp": "2020-12-22T00:32:50.766945+00:00",
   "repo": "martinthomson/h2-0rtt",
   "labels": [
     {
@@ -63,6 +63,22 @@
       "body": "It might simplify this spec (a lot) to say that all settings are remembered.  Right now, the settings that aren't marked as being memorable are those that simply don't apply during 0-RTT.  If we say that they could be remembered, then that would probably still work.\r\n\r\nIn order for this to work reliably, it might mean saying that either:\r\n\r\n1. new settings need to consider their use in 0-RTT and provide guidance, such as this draft does for existing settings\r\n2. new settings that don't have considerations for use in 0-RTT can't be used in 0-RTT\r\n\r\nThis isn't perfect, because some settings might result in actions that clients need to follow in ways that would be incompatible.  For instance, a setting from a server that - once acknowledged - changed the format of any frames that follow SETTINGS+ACK, would not work.\r\n\r\nWe could finesse this and say that there is no SETTINGS+ACK for what has effectively become an initial value, so that the new format changes only apply once the client sends SETTINGS+ACK in response to the server connection preface, but that would not be in the spirit of the design here.  The design here says that remembered values are in effect; that is, they replace initial values.\r\n\r\nThis would have the effect of making it impossible to define a setting that adjusted core protocol elements without having first paid special attention to 0-RTT usage.  As we have no such extension, it's probably reasonable to consider that as a possibility, though I would be more comfortable if that change were in a core HTTP/2 revision rather than an offshoot extension doc like this one.",
       "createdAt": "2020-12-18T03:16:09Z",
       "updatedAt": "2020-12-18T03:16:09Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU3NzE5MTc2NTA=",
+      "title": "Simple implementation",
+      "url": "https://github.com/martinthomson/h2-0rtt/issues/2",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Provide some guidance about how to implement this trivially.\r\n\r\nFor servers that don't change settings, advertising the value without any other special provisions is fine.\r\n\r\nThe cost is that you have to remove this setting when you want to change anything.  But as @wtarreau says, this is rare:\r\n\r\n> Server-side settings changes are extremely unlikely, unless some serious trouble are encountered with the current ones, in which case one will not want to keep them anyway, even less across a whole server farm. In this case I'd rather suggest users to proceed in two steps :\r\n>  - disable advertising of EARLY_DATA_SETTINGS and wait long enough for all clients to leave ;\r\n>  - perform the actual settings change and re-enable EARLY_DATA_SETTINGS\r\n\r\nI would point out though that you need to wait a week, because that is the longest time a ticket can be valid for 0-RTT.  That's probably fine.  You can use a shorter period if your tickets are valid for less time (a day is not unusual).\r\n\r\nAnd you can, in some cases, advertise larger settings here without disabling this feature for an entire week.",
+      "createdAt": "2020-12-21T07:14:36Z",
+      "updatedAt": "2020-12-21T07:14:36Z",
       "closedAt": null,
       "comments": []
     }
